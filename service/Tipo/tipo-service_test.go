@@ -23,22 +23,6 @@ func (m *MockRepository) FindAllTipos() ([]models.Tipo, error) {
 	return result.([]models.Tipo), args.Error(1)
 }
 
-func (m *MockRepository) FindAllUsers() ([]models.User, error) {
-	return nil, nil
-}
-
-func (m *MockRepository) CreateUser(user *models.User) (*models.User, error) {
-	return nil, nil
-}
-
-func (m *MockRepository) FindAllLinks() ([]models.Link, error) {
-	return nil, nil
-}
-
-func (m *MockRepository) CreateLink(user *models.Link) (*models.Link, error) {
-	return nil, nil
-}
-
 func TestFindAll(t *testing.T) {
 	mockRepo := new(MockRepository)
 	tipo := models.Tipo{Descripcion: "Descripcion"}

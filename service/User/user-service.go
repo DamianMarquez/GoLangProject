@@ -13,11 +13,16 @@ type UserService interface {
 	FindAll() ([]models.User, error)
 }
 
-var repo repository.MySqlRepository
+var repo MySqlRepository
 
-func NewUserService(repository repository.MySqlRepository) Service {
+func NewUserService(repository MySqlRepository) Service {
 	repo = repository
 	return Service{}
+}
+
+type MySqlRepository interface {
+	CreateUser(user *models.User) (*models.User, error)
+	FindAllUsers() ([]models.User, error)
 }
 
 type Service struct {

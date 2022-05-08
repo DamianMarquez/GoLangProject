@@ -13,9 +13,14 @@ type TipoService interface {
 	FindAll() ([]models.Tipo, error)
 }
 
-var repo repository.MySqlRepository
+type MySqlRepository interface {
+	CreateTipo(user *models.Tipo) (*models.Tipo, error)
+	FindAllTipos() ([]models.Tipo, error)
+}
 
-func NewTipoService(repository repository.MySqlRepository) Service {
+var repo MySqlRepository
+
+func NewTipoService(repository MySqlRepository) Service {
 	repo = repository
 	return Service{}
 }

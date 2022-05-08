@@ -13,9 +13,14 @@ type LinkService interface {
 	FindAll() ([]models.Link, error)
 }
 
-var repo repository.MySqlRepository
+type MySqlRepository interface {
+	CreateLink(user *models.Link) (*models.Link, error)
+	FindAllLinks() ([]models.Link, error)
+}
 
-func NewLinkService(repository repository.MySqlRepository) Service {
+var repo MySqlRepository
+
+func NewLinkService(repository MySqlRepository) Service {
 	repo = repository
 	return Service{}
 }
