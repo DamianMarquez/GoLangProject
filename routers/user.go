@@ -1,8 +1,10 @@
 package routers
 
 import (
-	userRepo "GoLangProject/repository"
+	"GoLangProject/models"
+	userRepository "GoLangProject/repository"
 	userService "GoLangProject/service/User"
+	"encoding/json"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -16,9 +18,15 @@ func userHandlers(router *mux.Router) {
 }
 
 func createUser(w http.ResponseWriter, r *http.Request) {
-	userRepo := userRepo.UserRepo{}
-	userSrv := userService.NewUserService(userRepo)
-	sendData(w, userSrv.FindAll(), http.StatusCreated)
+	userRepo := userRepository.UserRepo{}
+	user := models.User{}
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&user); err != nil {
+		userSrv := userService.NewUserService(userRepo)
+		sendData(w, userSrv.FindAll(), http.StatusCreated)
+	} else {
+		sendError(w, http.StatusInternalServerError)
+	}
 }
 
 func updateUser(w http.ResponseWriter, r *http.Request) {
