@@ -3,7 +3,6 @@ package User
 import (
 	"GoLangProject/models"
 	"errors"
-	"fmt"
 )
 
 type UserService interface {
@@ -22,7 +21,6 @@ func NewUserService(repository MySqlRepository) Service {
 type MySqlRepository interface {
 	CreateUser(user *models.User) (*models.User, error)
 	FindAllUsers() []models.User
-	MigrarUser() error
 }
 
 type Service struct {
@@ -48,12 +46,4 @@ func (*Service) Create(user *models.User) (*models.User, error) {
 
 func (*Service) FindAll() []models.User {
 	return repo.FindAllUsers()
-}
-
-func (*Service) MigrarUser() error {
-	err := repo.MigrarUser()
-	if err != nil {
-		fmt.Println("Error al Migrar User: ", err)
-	}
-	return err
 }

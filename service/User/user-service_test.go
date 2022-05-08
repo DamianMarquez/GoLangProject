@@ -23,10 +23,6 @@ func (m *MockRepository) FindAllUsers() []models.User {
 	return result.([]models.User)
 }
 
-func (m *MockRepository) MigrarUser() error {
-	return nil
-}
-
 func TestFindAll(t *testing.T) {
 	mockRepo := new(MockRepository)
 	user := models.User{Nombre: "Nombre", Email: "Email"}
