@@ -8,6 +8,7 @@ import (
 type UserService interface {
 	Validate(user *models.User) error
 	Create(user *models.User) (models.User, error)
+	Update(user *models.User) (models.User, error)
 	FindAll() ([]models.User, error)
 }
 
@@ -20,6 +21,7 @@ func NewUserService(repository MySqlRepository) Service {
 
 type MySqlRepository interface {
 	CreateUser(user *models.User) (*models.User, error)
+	UpdateUser(user *models.User) (*models.User, error)
 	FindAllUsers() []models.User
 }
 
@@ -42,6 +44,10 @@ func (*Service) Validate(user *models.User) error {
 
 func (*Service) Create(user *models.User) (*models.User, error) {
 	return repo.CreateUser(user)
+}
+
+func (*Service) Update(user *models.User) (*models.User, error) {
+	return repo.UpdateUser(user)
 }
 
 func (*Service) FindAll() []models.User {

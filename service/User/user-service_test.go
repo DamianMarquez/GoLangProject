@@ -23,6 +23,12 @@ func (m *MockRepository) FindAllUsers() []models.User {
 	return result.([]models.User)
 }
 
+func (m *MockRepository) UpdateUser(user *models.User) (*models.User, error) {
+	args := m.Called()
+	result := args.Get(0)
+	return result.(*models.User), args.Error(1)
+}
+
 func TestFindAll(t *testing.T) {
 	mockRepo := new(MockRepository)
 	user := models.User{Nombre: "Nombre", Email: "Email"}

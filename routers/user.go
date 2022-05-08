@@ -12,19 +12,19 @@ import (
 
 func userHandlers(router *mux.Router) {
 	router.HandleFunc("/user", createUser).Methods("POST")
-	router.HandleFunc("/user/{id:[0-9]+}", updateUser).Methods("PUT")
+	router.HandleFunc("/user", updateUser).Methods("PUT")
 	router.HandleFunc("/user/{id:[0-9]+}", deleteUser).Methods("DELETE")
 	router.HandleFunc("/user/{id:[0-9]+}", selectUser).Methods("GET")
 	router.HandleFunc("/user", selectUsers).Methods("GET")
 }
 
 func createUser(w http.ResponseWriter, r *http.Request) {
-	userRepo := userRepository.UserRepo{}
 	user := models.User{}
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&user); err != nil {
 		log.Println(err)
 	} else {
+		userRepo := userRepository.UserRepo{}
 		userSrv := userService.NewUserService(userRepo)
 		if userCreated, err := userSrv.Create(&user); err != nil {
 			log.Println("Error creating user: ", err)
@@ -36,7 +36,20 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateUser(w http.ResponseWriter, r *http.Request) {
-	sendData(w, "Update OK", http.StatusOK)
+	user := models.User{}
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&user); err != nil {
+		log.Println(err)
+	} else {
+		userRepo := userRepository.UserRepo{}
+		userSrv := userService.NewUserService(userRepo)
+		if userUpdated, err := userSrv.Update(&user); err != nil {
+			log.Println("Error updating user: ", err)
+		} else {
+			sendData(w, userUpdated, http.StatusCreated)
+		}
+	}
+	sendError(w, http.StatusInternalServerError)
 }
 
 func deleteUser(w http.ResponseWriter, r *http.Request) {

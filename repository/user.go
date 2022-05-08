@@ -12,6 +12,13 @@ func (u UserRepo) CreateUser(user *models.User) (*models.User, error) {
 	return user, nil
 }
 
+func (u UserRepo) UpdateUser(user *models.User) (*models.User, error) {
+	if err := Database.Save(&user).Error; err != nil {
+		return user, err
+	}
+	return user, nil
+}
+
 func (u UserRepo) FindAllUsers() []models.User {
 	users := []models.User{}
 	Database.Find(&users, models.User{})
