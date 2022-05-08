@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"GoLangProject/models"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
@@ -31,3 +32,7 @@ var Database = func() (db *gorm.DB) {
 		return db
 	}
 }()
+
+func Migrar() error {
+	return Database.AutoMigrate(models.User{})
+}
