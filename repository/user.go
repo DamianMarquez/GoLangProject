@@ -6,13 +6,15 @@ type UserRepo struct {
 }
 
 func (u UserRepo) CreateUser(user *models.User) (*models.User, error) {
-
-	return nil, nil
+	if err := Database.Create(&user).Error; err != nil {
+		return user, err
+	}
+	return user, nil
 }
 
 func (u UserRepo) FindAllUsers() []models.User {
 	users := []models.User{}
-	Database.Find(users, models.User{})
+	Database.Find(&users, models.User{})
 	return users
 }
 

@@ -6,6 +6,7 @@ import (
 	userService "GoLangProject/service/User"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -22,11 +23,16 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&user); err != nil {
-		userSrv := userService.NewUserService(userRepo)
-		sendData(w, userSrv.FindAll(), http.StatusCreated)
+		log.Println(err)
 	} else {
-		sendError(w, http.StatusInternalServerError)
+		userSrv := userService.NewUserService(userRepo)
+		if userCreated, err := userSrv.Create(&user); err != nil {
+			log.Println("Error creating user: ", err)
+		} else {
+			sendData(w, userCreated, http.StatusCreated)
+		}
 	}
+	sendError(w, http.StatusInternalServerError)
 }
 
 func updateUser(w http.ResponseWriter, r *http.Request) {
@@ -42,5 +48,8 @@ func selectUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func selectUsers(w http.ResponseWriter, r *http.Request) {
-	sendData(w, "select All OK", http.StatusOK)
+	userRepo := userRepository.UserRepo{}
+	userSrv := userService.NewUserService(userRepo)
+	sendData(w, userSrv.FindAll(), http.StatusCreated)
+
 }

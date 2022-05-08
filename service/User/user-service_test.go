@@ -17,10 +17,14 @@ func (m *MockRepository) CreateUser(user *models.User) (*models.User, error) {
 	return result.(*models.User), args.Error(1)
 }
 
-func (m *MockRepository) FindAllUsers() ([]models.User, error) {
+func (m *MockRepository) FindAllUsers() []models.User {
 	args := m.Called()
 	result := args.Get(0)
-	return result.([]models.User), args.Error(1)
+	return result.([]models.User)
+}
+
+func (m *MockRepository) MigrarUser() error {
+	return nil
 }
 
 func TestFindAll(t *testing.T) {
@@ -28,7 +32,7 @@ func TestFindAll(t *testing.T) {
 	user := models.User{Nombre: "Nombre", Email: "Email"}
 	mockRepo.On("FindAllUsers").Return([]models.User{user}, nil)
 	userService := NewUserService(mockRepo)
-	result, _ := userService.FindAll()
+	result := userService.FindAll()
 	mockRepo.AssertExpectations(t)
 	assert.Equal(t, "Nombre", result[0].Nombre)
 	assert.Equal(t, "Email", result[0].Email)
