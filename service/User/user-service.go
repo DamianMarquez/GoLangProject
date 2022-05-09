@@ -23,6 +23,7 @@ type MySqlRepository interface {
 	CreateUser(user *models.User) (*models.User, error)
 	UpdateUser(user *models.User) (*models.User, error)
 	FindAllUsers() []models.User
+	FindUser(int) models.User
 }
 
 type Service struct {
@@ -52,4 +53,8 @@ func (*Service) Update(user *models.User) (*models.User, error) {
 
 func (*Service) FindAll() []models.User {
 	return repo.FindAllUsers()
+}
+
+func (*Service) FindOne(id int) models.User {
+	return repo.FindUser(id)
 }

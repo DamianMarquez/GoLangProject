@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"strconv"
 )
 
 func userHandlers(router *mux.Router) {
@@ -57,7 +58,17 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func selectUser(w http.ResponseWriter, r *http.Request) {
-	sendData(w, "select OK", http.StatusOK)
+	userRepo := userRepository.UserRepo{}
+	userSrv := userService.NewUserService(userRepo)
+	vars := mux.Vars(r)
+	itemId, _ := strconv.Atoi(vars["id"])
+
+	if item := userSrv.FindOne(itemId); item.ID == 0 {
+		sendError(w, http.StatusNotFound)
+	} else {
+		sendData(w, item, http.StatusOK)
+	}
+
 }
 
 func selectUsers(w http.ResponseWriter, r *http.Request) {

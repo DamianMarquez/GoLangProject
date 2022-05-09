@@ -21,8 +21,14 @@ func (u UserRepo) UpdateUser(user *models.User) (*models.User, error) {
 
 func (u UserRepo) FindAllUsers() []models.User {
 	users := []models.User{}
-	Database.Find(&users, models.User{})
+	Database.First(&users, models.User{})
 	return users
+}
+
+func (u UserRepo) FindUser(id int) models.User {
+	user := models.User{}
+	Database.Find(&user, id)
+	return user
 }
 
 func (u UserRepo) MigrarUser() error {
