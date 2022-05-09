@@ -12,11 +12,11 @@ import (
 )
 
 func userHandlers(router *mux.Router) {
-	router.HandleFunc("/user", createUser).Methods("POST")
-	router.HandleFunc("/user", updateUser).Methods("PUT")
-	router.HandleFunc("/user/{id:[0-9]+}", deleteUser).Methods("DELETE")
-	router.HandleFunc("/user/{id:[0-9]+}", selectUser).Methods("GET")
-	router.HandleFunc("/user", selectUsers).Methods("GET")
+	router.HandleFunc("/users", createUser).Methods("POST")
+	router.HandleFunc("/users", updateUser).Methods("PUT")
+	router.HandleFunc("/users/{id:[0-9]+}", deleteUser).Methods("DELETE")
+	router.HandleFunc("/users/{id:[0-9]+}", selectUser).Methods("GET")
+	router.HandleFunc("/users", selectUsers).Methods("GET")
 }
 
 func createUser(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +33,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 			sendData(w, userCreated, http.StatusCreated)
 		}
 	}
-	sendError(w, http.StatusInternalServerError)
+	sendError(w, http.StatusBadRequest)
 }
 
 func updateUser(w http.ResponseWriter, r *http.Request) {
@@ -47,10 +47,10 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 		if userUpdated, err := userSrv.UpdateUser(&user); err != nil {
 			log.Println("Error updating user: ", err)
 		} else {
-			sendData(w, userUpdated, http.StatusCreated)
+			sendData(w, userUpdated, http.StatusOK)
 		}
 	}
-	sendError(w, http.StatusInternalServerError)
+	sendError(w, http.StatusBadRequest)
 }
 
 func deleteUser(w http.ResponseWriter, r *http.Request) {
@@ -64,10 +64,10 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 		if userdeleted, err := userSrv.DeleteUser(&user); err != nil {
 			log.Println("Error Deleting user: ", err)
 		} else {
-			sendData(w, userdeleted, http.StatusCreated)
+			sendData(w, userdeleted, http.StatusOK)
 		}
 	}
-	sendError(w, http.StatusInternalServerError)
+	sendError(w, http.StatusBadRequest)
 }
 
 func selectUser(w http.ResponseWriter, r *http.Request) {
@@ -87,5 +87,5 @@ func selectUser(w http.ResponseWriter, r *http.Request) {
 func selectUsers(w http.ResponseWriter, r *http.Request) {
 	userRepo := userRepository.UserRepo{}
 	userSrv := userService.NewUserService(userRepo)
-	sendData(w, userSrv.FindAllUsers(), http.StatusCreated)
+	sendData(w, userSrv.FindAllUsers(), http.StatusOK)
 }
