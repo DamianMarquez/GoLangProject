@@ -24,9 +24,7 @@ func (m *MockRepository) FindAllUsers() []models.User {
 }
 
 func (m *MockRepository) DeleteUser(user *models.User) (*models.User, error) {
-	args := m.Called()
-	result := args.Get(0)
-	return result.(*models.User), args.Error(1)
+	return m.CreateUser(user)
 }
 
 func (m *MockRepository) FindUser(id int) models.User {
@@ -36,9 +34,7 @@ func (m *MockRepository) FindUser(id int) models.User {
 }
 
 func (m *MockRepository) UpdateUser(user *models.User) (*models.User, error) {
-	args := m.Called()
-	result := args.Get(0)
-	return result.(*models.User), args.Error(1)
+	return m.CreateUser(user)
 }
 
 func TestCreateUser(t *testing.T) {
