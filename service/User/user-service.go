@@ -7,9 +7,11 @@ import (
 
 type UserService interface {
 	Validate(user *models.User) error
-	Create(user *models.User) (models.User, error)
-	Update(user *models.User) (models.User, error)
-	FindAll() ([]models.User, error)
+	CreateUser(user *models.User) (*models.User, error)
+	UpdateUser(user *models.User) (*models.User, error)
+	DeleteUser(user *models.User) (*models.User, error)
+	FindAllUsers() ([]models.User, error)
+	FindUser(id int) models.User
 }
 
 var repo MySqlRepository
@@ -24,6 +26,7 @@ type MySqlRepository interface {
 	UpdateUser(user *models.User) (*models.User, error)
 	FindAllUsers() []models.User
 	FindUser(int) models.User
+	DeleteUser(user *models.User) (*models.User, error)
 }
 
 type Service struct {
@@ -43,18 +46,22 @@ func (*Service) Validate(user *models.User) error {
 	return nil
 }
 
-func (*Service) Create(user *models.User) (*models.User, error) {
+func (*Service) CreateUser(user *models.User) (*models.User, error) {
 	return repo.CreateUser(user)
 }
 
-func (*Service) Update(user *models.User) (*models.User, error) {
+func (*Service) UpdateUser(user *models.User) (*models.User, error) {
 	return repo.UpdateUser(user)
 }
 
-func (*Service) FindAll() []models.User {
+func (*Service) FindAllUsers() []models.User {
 	return repo.FindAllUsers()
 }
 
-func (*Service) FindOne(id int) models.User {
+func (*Service) FindUser(id int) models.User {
 	return repo.FindUser(id)
+}
+
+func (*Service) DeleteUser(user *models.User) (*models.User, error) {
+	return repo.DeleteUser(user)
 }

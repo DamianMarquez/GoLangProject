@@ -19,6 +19,13 @@ func (u UserRepo) UpdateUser(user *models.User) (*models.User, error) {
 	return user, nil
 }
 
+func (u UserRepo) DeleteUser(user *models.User) (*models.User, error) {
+	if err := Database.Delete(&user).Error; err != nil {
+		return user, err
+	}
+	return user, nil
+}
+
 func (u UserRepo) FindAllUsers() []models.User {
 	users := []models.User{}
 	Database.First(&users, models.User{})

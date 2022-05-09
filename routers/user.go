@@ -27,7 +27,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	} else {
 		userRepo := userRepository.UserRepo{}
 		userSrv := userService.NewUserService(userRepo)
-		if userCreated, err := userSrv.Create(&user); err != nil {
+		if userCreated, err := userSrv.CreateUser(&user); err != nil {
 			log.Println("Error creating user: ", err)
 		} else {
 			sendData(w, userCreated, http.StatusCreated)
@@ -44,7 +44,7 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 	} else {
 		userRepo := userRepository.UserRepo{}
 		userSrv := userService.NewUserService(userRepo)
-		if userUpdated, err := userSrv.Update(&user); err != nil {
+		if userUpdated, err := userSrv.UpdateUser(&user); err != nil {
 			log.Println("Error updating user: ", err)
 		} else {
 			sendData(w, userUpdated, http.StatusCreated)
@@ -54,7 +54,20 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteUser(w http.ResponseWriter, r *http.Request) {
-	sendData(w, "Deleted OK", http.StatusOK)
+	user := models.User{}
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&user); err != nil {
+		log.Println(err)
+	} else {
+		userRepo := userRepository.UserRepo{}
+		userSrv := userService.NewUserService(userRepo)
+		if userdeleted, err := userSrv.DeleteUser(&user); err != nil {
+			log.Println("Error Deleting user: ", err)
+		} else {
+			sendData(w, userdeleted, http.StatusCreated)
+		}
+	}
+	sendError(w, http.StatusInternalServerError)
 }
 
 func selectUser(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +76,7 @@ func selectUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	itemId, _ := strconv.Atoi(vars["id"])
 
-	if item := userSrv.FindOne(itemId); item.ID == 0 {
+	if item := userSrv.FindUser(itemId); item.ID == 0 {
 		sendError(w, http.StatusNotFound)
 	} else {
 		sendData(w, item, http.StatusOK)
@@ -74,6 +87,5 @@ func selectUser(w http.ResponseWriter, r *http.Request) {
 func selectUsers(w http.ResponseWriter, r *http.Request) {
 	userRepo := userRepository.UserRepo{}
 	userSrv := userService.NewUserService(userRepo)
-	sendData(w, userSrv.FindAll(), http.StatusCreated)
-
+	sendData(w, userSrv.FindAllUsers(), http.StatusCreated)
 }
