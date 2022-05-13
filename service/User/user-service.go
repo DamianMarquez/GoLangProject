@@ -10,7 +10,7 @@ type UserService interface {
 	CreateUser(user *models.User) (*models.User, error)
 	UpdateUser(user *models.User) (*models.User, error)
 	DeleteUser(user *models.User) (*models.User, error)
-	FindAllUsers() ([]models.User, error)
+	FindAllUsers() []models.User
 	FindUser(id int) models.User
 }
 

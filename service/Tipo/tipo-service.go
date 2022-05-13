@@ -9,13 +9,19 @@ import (
 
 type TipoService interface {
 	Validate(user *models.Tipo) error
-	Create(user *models.Tipo) (models.Tipo, error)
-	FindAll() ([]models.Tipo, error)
+	CreateTipo(user *models.Tipo) (*models.Tipo, error)
+	UpdateTipo(user *models.Tipo) (*models.Tipo, error)
+	DeleteTipo(user *models.Tipo) (*models.Tipo, error)
+	FindAllTipos() []models.Tipo
+	FindTipo(id int) models.Tipo
 }
 
 type MySqlRepository interface {
 	CreateTipo(user *models.Tipo) (*models.Tipo, error)
-	FindAllTipos() ([]models.Tipo, error)
+	UpdateTipo(user *models.Tipo) (*models.Tipo, error)
+	DeleteTipo(user *models.Tipo) (*models.Tipo, error)
+	FindAllTipos() []models.Tipo
+	FindTipo(id int) models.Tipo
 }
 
 var repo MySqlRepository
@@ -39,12 +45,24 @@ func (*Service) Validate(tipo *models.Tipo) error {
 	return nil
 }
 
-func (*Service) Create(tipo *models.Tipo) (*models.Tipo, error) {
+func (*Service) CreateTipo(tipo *models.Tipo) (*models.Tipo, error) {
 	return repo.CreateTipo(tipo)
 }
 
-func (*Service) FindAll() ([]models.Tipo, error) {
+func (*Service) UpdateTipo(tipo *models.Tipo) (*models.Tipo, error) {
+	return repo.UpdateTipo(tipo)
+}
+
+func (*Service) FindAllTipos() []models.Tipo {
 	return repo.FindAllTipos()
+}
+
+func (*Service) FindTipo(id int) models.Tipo {
+	return repo.FindTipo(id)
+}
+
+func (*Service) DeleteTipo(tipo *models.Tipo) (*models.Tipo, error) {
+	return repo.DeleteTipo(tipo)
 }
 
 func (*Service) MigrarTipo() {

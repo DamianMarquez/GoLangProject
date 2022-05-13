@@ -17,10 +17,28 @@ func (m *MockRepository) CreateTipo(user *models.Tipo) (*models.Tipo, error) {
 	return result.(*models.Tipo), args.Error(1)
 }
 
-func (m *MockRepository) FindAllTipos() ([]models.Tipo, error) {
+func (m *MockRepository) FindAllTipos() []models.Tipo {
 	args := m.Called()
 	result := args.Get(0)
-	return result.([]models.Tipo), args.Error(1)
+	return result.([]models.Tipo)
+}
+
+func (m *MockRepository) DeleteTipo(user *models.Tipo) (*models.Tipo, error) {
+	args := m.Called()
+	result := args.Get(0)
+	return result.(*models.Tipo), args.Error(1)
+}
+
+func (m *MockRepository) FindTipo(id int) models.Tipo {
+	args := m.Called()
+	result := args.Get(0)
+	return result.(models.Tipo)
+}
+
+func (m *MockRepository) UpdateTipo(user *models.Tipo) (*models.Tipo, error) {
+	args := m.Called()
+	result := args.Get(0)
+	return result.(*models.Tipo), args.Error(1)
 }
 
 func TestFindAll(t *testing.T) {
@@ -28,7 +46,7 @@ func TestFindAll(t *testing.T) {
 	tipo := models.Tipo{Descripcion: "Descripcion"}
 	mockRepo.On("FindAllTipos").Return([]models.Tipo{tipo}, nil)
 	tipoService := NewTipoService(mockRepo)
-	result, _ := tipoService.FindAll()
+	result := tipoService.FindAllTipos()
 	mockRepo.AssertExpectations(t)
 	assert.Equal(t, "Descripcion", result[0].Descripcion)
 }
@@ -38,7 +56,7 @@ func TestCreateUser(t *testing.T) {
 	tipo := models.Tipo{Descripcion: "Descripcion"}
 	mockRepo.On("CreateTipo").Return(&tipo, nil)
 	tipoService := NewTipoService(mockRepo)
-	result, err := tipoService.Create(&tipo)
+	result, err := tipoService.CreateTipo(&tipo)
 	mockRepo.AssertExpectations(t)
 	assert.Equal(t, "Descripcion", result.Descripcion)
 	assert.Nil(t, err)
