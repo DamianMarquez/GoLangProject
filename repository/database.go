@@ -34,5 +34,14 @@ var Database = func() (db *gorm.DB) {
 }()
 
 func Migrar() error {
-	return Database.AutoMigrate(models.User{})
+	err := Database.AutoMigrate(models.Tipo{})
+	if err != nil {
+		return err
+	}
+	err = Database.AutoMigrate(models.User{})
+	if err != nil {
+		return err
+	}
+	err = Database.AutoMigrate(models.Link{})
+	return err
 }

@@ -11,6 +11,7 @@ func NewRouter() *mux.Router {
 	r := mux.NewRouter()
 
 	userHandlers(r)
+	tipoHandlers(r)
 
 	log.Println("Handlers UP")
 	return r
