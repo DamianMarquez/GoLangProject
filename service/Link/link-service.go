@@ -9,13 +9,19 @@ import (
 
 type LinkService interface {
 	Validate(user *models.Link) error
-	Create(user *models.Link) (models.Link, error)
-	FindAll() ([]models.Link, error)
+	CreateLink(user *models.Link) (*models.Link, error)
+	UpdateLink(user *models.Link) (*models.Link, error)
+	DeleteLink(user *models.Link) (*models.Link, error)
+	FindAllLinks() []models.Link
+	FindLink(id int) models.Link
 }
 
 type MySqlRepository interface {
 	CreateLink(user *models.Link) (*models.Link, error)
-	FindAllLinks() ([]models.Link, error)
+	UpdateLink(user *models.Link) (*models.Link, error)
+	DeleteLink(user *models.Link) (*models.Link, error)
+	FindAllLinks() []models.Link
+	FindLink(id int) models.Link
 }
 
 var repo MySqlRepository
@@ -41,12 +47,24 @@ func (*Service) Validate(link *models.Link) error {
 	return nil
 }
 
-func (*Service) Create(link *models.Link) (*models.Link, error) {
+func (*Service) CreateLink(link *models.Link) (*models.Link, error) {
 	return repo.CreateLink(link)
 }
 
-func (*Service) FindAll() ([]models.Link, error) {
+func (*Service) FindAllLinks() []models.Link {
 	return repo.FindAllLinks()
+}
+
+func (*Service) UpdateLink(link *models.Link) (*models.Link, error) {
+	return repo.UpdateLink(link)
+}
+
+func (*Service) FindLink(id int) models.Link {
+	return repo.FindLink(id)
+}
+
+func (*Service) DeleteLink(tipo *models.Link) (*models.Link, error) {
+	return repo.DeleteLink(tipo)
 }
 
 func (*Service) MigrarLink() {

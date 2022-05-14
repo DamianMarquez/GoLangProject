@@ -17,31 +17,82 @@ func (m *MockRepository) CreateLink(user *models.Link) (*models.Link, error) {
 	return result.(*models.Link), args.Error(1)
 }
 
-func (m *MockRepository) FindAllLinks() ([]models.Link, error) {
+func (m *MockRepository) FindAllLinks() []models.Link {
 	args := m.Called()
 	result := args.Get(0)
-	return result.([]models.Link), args.Error(1)
+	return result.([]models.Link)
 }
 
-func TestFindAll(t *testing.T) {
+func (m *MockRepository) DeleteLink(link *models.Link) (*models.Link, error) {
+	args := m.Called()
+	result := args.Get(0)
+	return result.(*models.Link), args.Error(1)
+}
+
+func (m *MockRepository) FindLink(id int) models.Link {
+	args := m.Called()
+	result := args.Get(0)
+	return result.(models.Link)
+}
+
+func (m *MockRepository) UpdateLink(link *models.Link) (*models.Link, error) {
+	args := m.Called()
+	result := args.Get(0)
+	return result.(*models.Link), args.Error(1)
+}
+
+func TestFindAllLinks(t *testing.T) {
 	mockRepo := new(MockRepository)
 	link := models.Link{URL: "URL", Id_user: 1}
 	mockRepo.On("FindAllLinks").Return([]models.Link{link}, nil)
 	linkService := NewLinkService(mockRepo)
-	result, _ := linkService.FindAll()
+	result := linkService.FindAllLinks()
 	mockRepo.AssertExpectations(t)
 	assert.Equal(t, "URL", result[0].URL)
 }
 
-func TestCreateUser(t *testing.T) {
+func TestCreateLink(t *testing.T) {
 	mockRepo := new(MockRepository)
 	link := models.Link{URL: "URL", Id_user: 1}
 	mockRepo.On("CreateLink").Return(&link, nil)
 	linkService := NewLinkService(mockRepo)
-	result, err := linkService.Create(&link)
+	result, err := linkService.CreateLink(&link)
 	mockRepo.AssertExpectations(t)
 	assert.Equal(t, "URL", result.URL)
 	assert.Nil(t, err)
+}
+
+func TestDeleteLink(t *testing.T) {
+	mockRepo := new(MockRepository)
+	link := models.Link{URL: "URL", Id_user: 1}
+	mockRepo.On("DeleteLink").Return(&link, nil)
+	linkService := NewLinkService(mockRepo)
+	result, err := linkService.DeleteLink(&link)
+	mockRepo.AssertExpectations(t)
+	assert.Equal(t, "URL", result.URL)
+	assert.Nil(t, err)
+}
+
+func TestUdateLink(t *testing.T) {
+	mockRepo := new(MockRepository)
+	link := models.Link{URL: "URL", Id_user: 1}
+	mockRepo.On("UpdateLink").Return(&link, nil)
+	linkService := NewLinkService(mockRepo)
+	result, err := linkService.UpdateLink(&link)
+	mockRepo.AssertExpectations(t)
+	assert.Equal(t, "URL", result.URL)
+	assert.Nil(t, err)
+}
+
+func TestFindLink(t *testing.T) {
+	mockRepo := new(MockRepository)
+	link := models.Link{URL: "URL", Id_user: 1}
+	mockRepo.On("FindLink").Return(link)
+	linkService := NewLinkService(mockRepo)
+	result := linkService.FindLink(1)
+	mockRepo.AssertExpectations(t)
+	assert.Equal(t, "URL", result.URL)
+	assert.Nil(t, nil)
 }
 
 func TestValidateNil(t *testing.T) {
