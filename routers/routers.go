@@ -12,6 +12,7 @@ func NewRouter() *mux.Router {
 
 	userHandlers(r)
 	tipoHandlers(r)
+	linkHandlers(r)
 
 	log.Println("Handlers UP")
 	return r
