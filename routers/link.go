@@ -11,12 +11,14 @@ import (
 	"strconv"
 )
 
+const linkPath = "/links"
+
 func linkHandlers(router *mux.Router) {
-	router.HandleFunc("/links", createLink).Methods("POST")
-	router.HandleFunc("/links", updateLink).Methods("PUT")
-	router.HandleFunc("/links/{id:[0-9]+}", deleteLink).Methods("DELETE")
-	router.HandleFunc("/links/{id:[0-9]+}", selectLink).Methods("GET")
-	router.HandleFunc("/links", selectLinks).Methods("GET")
+	router.HandleFunc(linkPath, createLink).Methods("POST")
+	router.HandleFunc(linkPath, updateLink).Methods("PUT")
+	router.HandleFunc(linkPath+regExp, deleteLink).Methods("DELETE")
+	router.HandleFunc(linkPath+regExp, selectLink).Methods("GET")
+	router.HandleFunc(linkPath, selectLinks).Methods("GET")
 }
 
 func createLink(w http.ResponseWriter, r *http.Request) {

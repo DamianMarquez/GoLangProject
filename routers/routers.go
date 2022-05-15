@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+const regExp = "/{id:[0-9]+}"
+
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
 

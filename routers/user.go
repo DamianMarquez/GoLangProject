@@ -11,12 +11,14 @@ import (
 	"strconv"
 )
 
+const usersPath = "/users"
+
 func userHandlers(router *mux.Router) {
-	router.HandleFunc("/users", createUser).Methods("POST")
-	router.HandleFunc("/users", updateUser).Methods("PUT")
-	router.HandleFunc("/users/{id:[0-9]+}", deleteUser).Methods("DELETE")
-	router.HandleFunc("/users/{id:[0-9]+}", selectUser).Methods("GET")
-	router.HandleFunc("/users", selectUsers).Methods("GET")
+	router.HandleFunc(usersPath, createUser).Methods("POST")
+	router.HandleFunc(usersPath, updateUser).Methods("PUT")
+	router.HandleFunc(usersPath+regExp, deleteUser).Methods("DELETE")
+	router.HandleFunc(usersPath+regExp, selectUser).Methods("GET")
+	router.HandleFunc(usersPath, selectUsers).Methods("GET")
 }
 
 func createUser(w http.ResponseWriter, r *http.Request) {

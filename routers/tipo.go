@@ -11,12 +11,14 @@ import (
 	"strconv"
 )
 
+const tiposPath = "/tipos"
+
 func tipoHandlers(router *mux.Router) {
-	router.HandleFunc("/tipos", createTipo).Methods("POST")
-	router.HandleFunc("/tipos", updateTipo).Methods("PUT")
-	router.HandleFunc("/tipos/{id:[0-9]+}", deleteTipo).Methods("DELETE")
-	router.HandleFunc("/tipos/{id:[0-9]+}", selectTipo).Methods("GET")
-	router.HandleFunc("/tipos", selectTipos).Methods("GET")
+	router.HandleFunc(tiposPath, createTipo).Methods("POST")
+	router.HandleFunc(tiposPath, updateTipo).Methods("PUT")
+	router.HandleFunc(tiposPath+regExp, deleteTipo).Methods("DELETE")
+	router.HandleFunc(tiposPath+regExp, selectTipo).Methods("GET")
+	router.HandleFunc(tiposPath, selectTipos).Methods("GET")
 }
 
 func createTipo(w http.ResponseWriter, r *http.Request) {
